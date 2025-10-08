@@ -1,0 +1,8 @@
+[package]
+name = "runtime-array"
+version = "1.0.0"
+edition = "2024"
+description = "Rust crate that provides an array, that can be allocated in runtime"
+license = "MIT"
+
+[dependencies]
