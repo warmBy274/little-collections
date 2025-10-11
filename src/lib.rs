@@ -9,15 +9,12 @@ use std::{
 
 #[macro_export]
 macro_rules! array {
-    ($value:expr; $len:expr) => {{
-        let value = $value;
-        let len = $len;
-        $crate::RuntimeArray::new(value, len)
+    [$value:expr; $len:expr] => {{
+        $crate::RuntimeArray::new($value, $len)
     }};
-    ($($item:expr),* $(,)?) => {{
-        let items = [$($item),*];
-        $crate::RuntimeArray::from_slice(&items)
-    }};
+    [$($item:expr),+ $(,)?] => {{
+        $crate::RuntimeArray::from_slice(&[$($item),+])
+    }}
 }
 
 pub struct RuntimeArray<T> {
