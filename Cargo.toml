@@ -1,6 +1,6 @@
 [package]
 name = "heap-array"
-version = "2.4.0"
+version = "2.5.0"
 edition = "2024"
 description = "Rust crate that provides an fast array, that can be allocated in runtime on heap"
 license = "MIT"

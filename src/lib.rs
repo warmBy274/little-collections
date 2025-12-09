@@ -95,6 +95,15 @@ impl<T: Clone> Clone for HeapArray<T> {
         }
     }
 }
+impl<T> Default for HeapArray<T> {
+    fn default() -> Self {
+        Self {
+            ptr: NonNull::dangling(),
+            len: 0,
+            _marker: PhantomData
+        }
+    }
+}
 impl<T> HeapArray<T> {
     #[inline]
     #[must_use]
