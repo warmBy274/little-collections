@@ -60,3 +60,5 @@ impl<T> RingBuffer<T> {
         for value in values {self.write(value);}
     }
 }
+unsafe impl<T: Send> Send for RingBuffer<T> {}
+unsafe impl<T: Sync> Sync for RingBuffer<T> {}

@@ -111,16 +111,6 @@ impl<T> HeapArray<T> {
     }
     #[inline]
     #[must_use]
-    pub fn len(&self) -> usize {
-        self.len
-    }
-    #[inline]
-    #[must_use]
-    pub fn is_empty(&self) -> bool {
-        self.len == 0
-    }
-    #[inline]
-    #[must_use]
     pub fn as_slice(&self) -> &[T] {
         unsafe {from_raw_parts(self.ptr.as_ptr(), self.len)}
     }
@@ -128,6 +118,16 @@ impl<T> HeapArray<T> {
     #[must_use]
     pub fn as_mut_slice(&mut self) -> &mut [T] {
         unsafe {from_raw_parts_mut(self.ptr.as_ptr(), self.len)}
+    }
+    #[inline]
+    #[must_use]
+    pub fn len(&self) -> usize {
+        self.len
+    }
+    #[inline]
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
     }
     #[inline]
     #[must_use]
@@ -225,6 +225,11 @@ impl<'a, T> IntoIterator for &'a mut HeapArray<T> {
         self.iter_mut()
     }
 }
+impl<T> FromIterator<T> for HeapArray<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        Self::from_slice(&Vec::from_iter(iter))
+    }
+}
 unsafe impl<T: Send> Send for HeapArray<T> {}
 unsafe impl<T: Sync> Sync for HeapArray<T> {}
 
@@ -246,7 +251,7 @@ impl<'a, T> Iterator for Iter<'a, T> {
         }
     }
     #[inline]
-    fn size_hint(&self) -> (usize, Option<usize>) { 
+    fn size_hint(&self) -> (usize, Option<usize>) {
         let len = unsafe {self.end.offset_from(self.ptr)} as usize;
         (len, Some(len))
     }
