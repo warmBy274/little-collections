@@ -1,11 +1,5 @@
 use std::{
-    iter::{Iterator, IntoIterator, ExactSizeIterator},
-    slice::{from_raw_parts, from_raw_parts_mut},
-    alloc::{alloc, dealloc, Layout},
-    ops::{Index, IndexMut},
-    marker::PhantomData,
-    mem::ManuallyDrop,
-    ptr::NonNull
+    alloc::{Layout, alloc, dealloc}, fmt::Debug, iter::{ExactSizeIterator, IntoIterator, Iterator}, marker::PhantomData, mem::ManuallyDrop, ops::{Index, IndexMut}, ptr::NonNull, slice::{from_raw_parts, from_raw_parts_mut}
 };
 
 #[macro_export]
@@ -225,6 +219,11 @@ impl<'a, T> IntoIterator for &'a mut HeapArray<T> {
 impl<T> FromIterator<T> for HeapArray<T> {
     fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
         Self::from_slice(&Vec::from_iter(iter))
+    }
+}
+impl<T: Debug> Debug for HeapArray<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self.as_slice())
     }
 }
 unsafe impl<T: Send> Send for HeapArray<T> {}
